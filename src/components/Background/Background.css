@@ -1,0 +1,23 @@
+.cloud-icon__big {
+    position: absolute;
+    top: 0;
+    left: 41.4%;
+}
+
+.cloud-icon__middle {
+    position: absolute;
+    top: 8.66%;
+    left: 10%;
+}
+
+.cloud-icon__little {
+    position: absolute;
+    top: 25%;
+    left: 75%;
+}
+
+.line-big-icon {
+    position: absolute;
+    top: 605px;
+    left: 0;
+}

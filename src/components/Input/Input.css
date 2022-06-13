@@ -1,0 +1,97 @@
+.input {
+    border: 3px solid black;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 15px;
+    height: 70px;
+    outline: none;
+    text-align: start;
+    background-color: white;
+    vertical-align: text-top;
+    resize: none;
+    overflow: auto;
+}
+
+textarea::-webkit-scrollbar {
+    width: 3px;
+    margin-left: 30px;
+    background-color: black;
+}
+
+.input::placeholder {
+    color: #BFBFBF;
+}
+
+.input:focus::placeholder {
+    color: #878787;
+}
+
+.input::-webkit-input-placeholder {
+    color: #BFBFBF;
+}
+
+.input:focus::-webkit-input-placeholder {
+    color: #878787;
+}
+
+/* Firefox < 19 */
+.input:-moz-placeholder {
+    color: #BFBFBF;
+}
+.input:focus:-moz-placeholder {
+    color: #878787;
+}
+
+/* Firefox > 19 */
+.input::-moz-placeholder {
+    color: #BFBFBF;
+}
+.input:focus::-moz-placeholder {
+    color: #878787;
+}
+
+/* Internet Explorer 10 */
+.input:-ms-input-placeholder {
+    color: #BFBFBF;
+}
+.input:focus:-ms-input-placeholder {
+    color: #878787;
+}
+
+/*Button for Input File*/
+.button-placeholder {
+    color: black;
+}
+
+.button-placeholder:hover {
+    color: #4B4B4B;
+}
+
+.button-placeholder:active {
+    color: #868686;
+}
+
+.input__big {
+    height: 188px;
+}
+
+.input.input__error {
+    border-color: lightcoral;
+}
+
+.input-error {
+    color: lightcoral;
+    margin: 5px 0;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.input__file {
+    display: none;
+}
+
+.input__filled {
+    background-color: #BFBFBF;
+}

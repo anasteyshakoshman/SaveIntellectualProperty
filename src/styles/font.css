@@ -1,0 +1,28 @@
+@font-face {
+    font-family: 'nft';
+    src: url('./NFT.ttf');
+}
+
+html, body, #root {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    min-width: 1400px;
+}
+
+body, input, button, textarea {
+    font-family: nft, serif;
+}
+
+a {
+    text-decoration: none;
+}
+h1, p {
+    margin: 0;
+}
+
+h3 {
+    margin-top: 10px;
+    margin-bottom: 0;
+}

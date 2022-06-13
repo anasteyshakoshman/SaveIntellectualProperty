@@ -1,18 +1,54 @@
 {
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@loadable/component": "^5.15.2",
+    "@mui/icons-material": "latest",
+    "@mui/material": "latest",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.27.2",
+    "classnames": "^2.3.1",
+    "css-loader": "^6.7.1",
+    "file-loader": "^6.2.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.0",
+    "lodash.throttle": "^4.1.1",
+    "node-forge": "^1.3.1",
+    "prettier": "^2.6.2",
+    "prop-types": "^15.8.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1",
+    "sass": "^1.52.2",
+    "web-vitals": "^2.1.4",
+    "web3": "^1.7.3"
+  },
+  "devDependencies": {
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "eslintConfig": {
     "extends": [
