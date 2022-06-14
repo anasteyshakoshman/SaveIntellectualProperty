@@ -2,7 +2,8 @@ import { IMAGE } from '../constants/action-types';
 
 const initialState = {
     hash: '',
-    isDuplicate: false
+    isDuplicate: false,
+    wasSavedToPinata: false
 };
 
 export const image = (state = initialState, action) => {
@@ -21,11 +22,19 @@ export const image = (state = initialState, action) => {
             };
         }
 
+        case IMAGE.SET_PINATA_SAVING: {
+            return {
+                ...state,
+                wasSavedToPinata: true
+            };
+        }
+
         case IMAGE.CLEAR_DATA: {
             return {
                 ...state,
                 hash: '',
-                isDuplicate: false
+                isDuplicate: false,
+                wasSavedToPinata: false
             };
         }
 

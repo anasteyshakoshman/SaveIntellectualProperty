@@ -29,3 +29,12 @@ export const generateImageSha256 = (imageFile, setImageSha256) => {
         setImageSha256(generateSha256.digest().toHex());
     };
 };
+
+export const convertDate = (fullDateString) => {
+    const date = new Date(fullDateString);
+    const dateNumbers = [date.getDate(), date.getMonth() + 1].map( (el) => {
+        return el > 9 ? el : '0' + el
+    });
+
+    return dateNumbers[0] + '.' + dateNumbers[1] + '.' + date.getFullYear();
+}

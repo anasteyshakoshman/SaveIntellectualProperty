@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Input from '../../components/Input/Input';
 import ButtonSubmit from '../../containers/ButtonSumbit';
+import Metamask from '../../containers/Metamask';
 // resources
 import {
     paperIcon,
     lineIcon
 } from '../../resources';
 // utils
+import { generateImageSha256 } from '../../utils';
 import throttle from 'lodash.throttle';
 // constants
 import {
@@ -17,10 +19,9 @@ import {
     IMAGE_NAME,
     AUTHOR,
     FILE,
-    inputFields,
-    errorsMap
+    inputImageFields,
+    errorsImageMap
 } from '../../constants';
-import {generateImageSha256, getShortEthAddress} from '../../utils';
 // styles
 import './Main.css';
 
@@ -58,7 +59,7 @@ const Main = (props) => {
         }
     }, [errors, setErrors]);
 
-    const handleChangeInput = useCallback((fieldName, isFile = false) => (event) => {
+    const handleChangeInput = useCallback((fieldName, isFile = false) => async (event) => {
         event.preventDefault();
 
         const fieldValue = isFile ? event?.target?.files[0] : event?.target?.value;
@@ -69,7 +70,7 @@ const Main = (props) => {
         });
 
         if (isFile) {
-            clearImageData();
+            await clearImageData();
             generateImageSha256(fieldValue, setImageSha256);
         }
 
@@ -82,9 +83,9 @@ const Main = (props) => {
         const isFilledFile = Boolean(form[FILE]);
 
         setErrors({
-            [IMAGE_NAME]: isFilledName ? '' : errorsMap[IMAGE_NAME],
-            [IMAGE_DESCRIPTION]: isFilledDescription ? '' : errorsMap[IMAGE_DESCRIPTION],
-            [FILE]: isFilledFile ? '' : errorsMap[FILE],
+            [IMAGE_NAME]: isFilledName ? '' : errorsImageMap[IMAGE_NAME],
+            [IMAGE_DESCRIPTION]: isFilledDescription ? '' : errorsImageMap[IMAGE_DESCRIPTION],
+            [FILE]: isFilledFile ? '' : errorsImageMap[FILE],
             [AUTHOR]: !authorAddress
         });
 
@@ -118,7 +119,7 @@ const Main = (props) => {
         <div className='main'>
             <div className='left'>
                 <div className='description'>
-                    <h1 className='title'>
+                    <h1 className='description-title'>
                         SIP
                         <img
                             className='title-icon'
@@ -126,32 +127,22 @@ const Main = (props) => {
                             alt='' />
                     </h1>
                     <img src={lineIcon} alt='' />
-                    <h3 className='subtitle'>
+                    <h3 className='description-subtitle'>
                         Загрузите картинку и&nbsp;получите на нее авторское право на&nbsp;блокчейн
                     </h3>
                 </div>
                 <div className='help'>
                     <Link to='/profile'>
-                        <h3 className='help-title'>
+                        <h3 className='link-title'>
                             Ваш профиль
                         </h3>
                     </Link>
-                    {authorAddress ? (
-                        <h3 className='help-account'>
-                            Account: {getShortEthAddress(authorAddress)}
-                        </h3>
-                    ) : (
-                        <h3
-                            className={`help-title ${errors[AUTHOR] ? 'help-title__error' : ''}`}
-                            onClick={getUserAddress}>
-                            Подключить Metamask
-                        </h3>
-                    )}
+                    <Metamask isError={errors[AUTHOR]} />
                 </ div>
             </ div>
             <div className='right'>
                 <div className='form'>
-                    {inputFields.map(data => (
+                    {inputImageFields.map(data => (
                         <Input
                             {...data}
                             key={data.name}
@@ -159,7 +150,9 @@ const Main = (props) => {
                             error={errors[data.name]}
                             handleChange={handleChangeInput} />
                     ))}
-                    <ButtonSubmit handleSubmit={handleSubmit} />
+                    <ButtonSubmit
+                        text='Получить авторство'
+                        handleSubmit={handleSubmit} />
                 </div>
             </div>
         </div>

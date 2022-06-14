@@ -1,7 +1,7 @@
-import { USER, ALERT, LOADING, IMAGE } from '../constants/action-types';
+import {USER, ALERT, CONDITION, IMAGE } from '../constants/action-types';
 import { Api } from '../api';
 import {
-    cancelMetamaskPayment,
+    cancelMetamaskApprove,
     walletConnectionProcessStartedErrorCode,
     pinataOptions
 } from '../constants';
@@ -9,13 +9,13 @@ import {
 // LOADING
 const turnOnLoading = () => dispatch => {
     dispatch({
-        type: LOADING.TURN_ON
+        type: CONDITION.LOADING_TURN_ON
     });
 };
 
 const turnOffLoading = () => dispatch => {
     dispatch({
-        type: LOADING.TURN_OFF
+        type: CONDITION.LOADING_TURN_OFF
     });
 };
 
@@ -44,14 +44,18 @@ export const getUserAddress = () => dispatch => {
                 type: USER.SET_ADDRESS,
                 address: response[0]
             });
+
+            // После удачной авторизации подгружаем информацию об авторе и его список работ
+            dispatch(getAuthorInfo());
+            dispatch(getListImages());
         })
         .catch(error => {
             switch(error?.code) {
                 case walletConnectionProcessStartedErrorCode:
                     dispatch(setAlertMessage('Запрос на подключение к Metamask был отправлен, пожалуйста, подождите'));
                     break;
-                case cancelMetamaskPayment:
-                    dispatch(setAlertMessage('Оплата транзакции была отменена'));
+                case cancelMetamaskApprove:
+                    dispatch(setAlertMessage('Доступ к аккаунту metamask не был предоставлен'));
                     break;
                 default:
                     dispatch(setAlertMessage('Что-то пошло не так, пожалуйста, попробуйте позже'));
@@ -60,12 +64,66 @@ export const getUserAddress = () => dispatch => {
         });
 };
 
-export const getUserName = ()  => async (dispatch, getState) => {
-    //
-}
+export const setAuthorInfo = (name, description) => async (dispatch, getState) => {
+    const {
+        address,
+        name: oldName,
+        description: oldDescription
+    } = getState().user;
 
-export const getUserDescription = ()  => async (dispatch, getState) => {
-    //
+    if (!address) {
+        return;
+    }
+
+    try {
+        if (name !== oldName) {
+            await Api.setAuthorName(address, name);
+
+            dispatch({
+                type: USER.SET_NAME,
+                name
+            });
+        }
+
+        if (description !== oldDescription) {
+            await Api.setAuthorDescription(address, description);
+
+            dispatch({
+                type: USER.SET_DESCRIPTION,
+                description
+            });
+        }
+    } catch (error) {}
+};
+
+export const getAuthorInfo = ()  => async (dispatch, getState) => {
+    const {
+        address,
+        name: oldName,
+        description: oldDescription
+    } = getState().user;
+
+    if (!address) {
+        return;
+    }
+
+    const name = await Api.getAuthorName(address);
+
+    if (name && name !== oldName) {
+        dispatch({
+            type: USER.SET_NAME,
+            name
+        });
+    }
+
+    const description = await Api.getAuthorDescription(address);
+
+    if (description && description !== oldDescription) {
+        dispatch({
+            type: USER.SET_DESCRIPTION,
+            description
+        });
+    }
 }
 
 export const getListImages = () => async (dispatch, getState) => {
@@ -74,6 +132,11 @@ export const getListImages = () => async (dispatch, getState) => {
     if (!address) {
         return;
     }
+
+    dispatch({
+        type: CONDITION.WAS_REQUEST_IMAGE_LIST,
+        result: true
+    });
 
     try {
         const listTokens = await Api.getListAuthorImages(address);
@@ -109,7 +172,12 @@ export const getListImages = () => async (dispatch, getState) => {
             type: USER.SET_AUTHOR_IMAGES,
             data: listImages
         });
-    } catch(error) {}
+    } catch(error) {
+        dispatch({
+            type: CONDITION.WAS_REQUEST_IMAGE_LIST,
+            result: false
+        });
+    }
 };
 
 // IMAGE
@@ -138,14 +206,14 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
     dispatch(turnOnLoading());
 
     const data = new FormData();
-    const autorAddress = user.address;
+    const authorAddress = user.address;
     const metadata = JSON.stringify({
         name: hash, // в это поле кладем сгенерированное sha256 картинки для последующего получения изображения по хэшу
         keyvalues: {
             name,
             description,
-            autorAddress,
-            ownerAddress: autorAddress,
+            authorAddress,
+            ownerAddress: authorAddress,
             createdAt: (new Date()).toString()
         }
     });
@@ -169,7 +237,11 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
                     type: IMAGE.SET_IS_DUPLICATE
                 });
                 dispatch(turnOffLoading());
-            } else if (!IpfsHash) {
+            } else if (IpfsHash) {
+                dispatch({
+                    type: IMAGE.SET_PINATA_SAVING
+                });
+            } else {
                 throw new Error();
             }
         })
@@ -180,9 +252,12 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
 };
 
 export const saveImageToBlockchain = () => async (dispatch, getState) => {
-    const { image: { hash }, user: { address } } = getState();
+    const {
+        user: { address },
+        image: { hash, isDuplicate, wasSavedToPinata }
+    } = getState();
 
-    if (!hash) {
+    if (!hash || !wasSavedToPinata) {
         return false;
     }
 
@@ -199,9 +274,12 @@ export const saveImageToBlockchain = () => async (dispatch, getState) => {
         dispatch(clearImageData());
         dispatch(turnOffLoading());
 
+        // Обновляем список работ на клиенте после регистрации новой работы
+        dispatch(getListImages());
+
         return true;
     } catch (error) {
-        if (error?.code === cancelMetamaskPayment) {
+        if (error?.code === cancelMetamaskApprove) {
             dispatch(setAlertMessage('Оплата транзакции была отменена'));
         } else {
             dispatch(setAlertMessage('Что-то пошло не так, попробуйте еще раз :)'));

@@ -3,5 +3,5 @@ import ButtonSubmit from '../components/ButtonSubmit/ButtonSubmit';
 
 export default connect((state, ownProps) => ({
     ...ownProps,
-    isLoading: state.loading.isLoading
+    isLoading: state.condition.buttonLoading
 }))(ButtonSubmit);

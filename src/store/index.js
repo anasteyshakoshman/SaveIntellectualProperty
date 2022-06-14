@@ -1,10 +1,10 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { alert, loading, image, user } from '../reducers';
+import { alert, condition, image, user } from '../reducers';
 
 const rootReducer = combineReducers({
     alert: alert,
-    loading: loading,
+    condition: condition,
     image: image,
     user: user
 });

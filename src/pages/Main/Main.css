@@ -17,19 +17,20 @@
     display: flex;
 }
 
-.title {
+.description-title {
     position: relative;
     font-size: 140px;
     line-height: 140px;
     margin-top: 221px;
     width: fit-content;
+    color: black;
 }
 
 .title-icon {
     margin-left: 36px;
 }
 
-.subtitle {
+.description-subtitle {
     margin-top: 24px;
     max-width: 580px;
     font-size: 16px;
@@ -39,10 +40,10 @@
 
 .form {
     display: flex;
-    width: 457px;
+    width: 387px;
     margin-top: 167px;
     flex-direction: column;
-    padding: 25px;
+    padding: 32px;
     border: 3px solid black;
     background-color: white;
 }
@@ -50,41 +51,4 @@
 .help {
     display: flex;
     flex-direction: column;
-}
-
-.help-title,
-.help-account {
-    font-size: 16px;
-    line-height: 20px;
-    color: black;
-}
-
-.help-account {
-    color: #818181;
-}
-
-.help-title:hover {
-    color: #505050;
-}
-
-.help-title:active {
-    color: #818181;
-}
-
-.help-title__error {
-    color: lightcoral;
-    animation-name: pulse;
-    animation-duration: 1.5s;
-    animation-direction: alternate;
-    animation-iteration-count: 2;
-}
-
-@keyframes pulse {
-    30% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: .3;
-    }
 }

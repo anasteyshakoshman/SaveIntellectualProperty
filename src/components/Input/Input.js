@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { typesFiles } from '../../constants';
 import './Input.css';
 
-const Input = ({ name, value, placeholder, error, isBig, isFile, handleChange }) => {
+const Input = ({ name, value, placeholder, error, isBig, isLarge, isFile, handleChange }) => {
     const [inputFileRef, setInputFileRef] = useState(null);
 
     const setFileInputNode = useCallback(node => {
@@ -23,7 +23,9 @@ const Input = ({ name, value, placeholder, error, isBig, isFile, handleChange })
 
     const inputClassnames = cx('input', {
         'input__big': isBig,
+        'input__large': isLarge,
         'input__error': error,
+        'input__file': isFile,
         'input__filled': isFile && value
     });
 
@@ -40,7 +42,7 @@ const Input = ({ name, value, placeholder, error, isBig, isFile, handleChange })
                     <input
                         ref={setFileInputNode}
                         type='file'
-                        className='input__file'
+                        className='input__hidden'
                         accept={typesFiles}
                         multiple={false}
                         onChange={handleChange(name, true)} />
@@ -51,7 +53,7 @@ const Input = ({ name, value, placeholder, error, isBig, isFile, handleChange })
     }
 
     // textarea
-    if (isBig) {
+    if (isBig || isLarge) {
         return (
             <>
                 <textarea
@@ -87,12 +89,18 @@ Input.propTypes = {
         PropTypes.object
     ]).isRequired,
     error: PropTypes.string,
+    isFile: PropTypes.bool,
+    isBig: PropTypes.bool,
+    isLarge: PropTypes.bool,
     placeholder: PropTypes.string.isRequired,
     handleChange: PropTypes.func.isRequired
 };
 
 Input.defaultProps = {
-    error: ''
+    error: '',
+    isFile: false,
+    isBig: false,
+    isLarge: false
 };
 
 export default Input;

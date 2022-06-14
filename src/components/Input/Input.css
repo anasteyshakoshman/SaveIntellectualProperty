@@ -3,9 +3,9 @@
     font-size: 16px;
     line-height: 20px;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 6px 0;
     padding: 15px;
-    height: 70px;
+    height: 34px;
     outline: none;
     text-align: start;
     background-color: white;
@@ -73,8 +73,16 @@ textarea::-webkit-scrollbar {
     color: #868686;
 }
 
+.input__file {
+    height: 70px;
+}
+
 .input__big {
-    height: 188px;
+    height: 152px;
+}
+
+.input__large {
+    height: 336px;
 }
 
 .input.input__error {
@@ -88,7 +96,7 @@ textarea::-webkit-scrollbar {
     line-height: 12px;
 }
 
-.input__file {
+.input__hidden {
     display: none;
 }
 

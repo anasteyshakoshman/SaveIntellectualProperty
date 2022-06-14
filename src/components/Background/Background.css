@@ -21,3 +21,9 @@
     top: 605px;
     left: 0;
 }
+
+@media (max-width: 800px) {
+    .cloud-icon__middle {
+        display: none;
+    }
+}

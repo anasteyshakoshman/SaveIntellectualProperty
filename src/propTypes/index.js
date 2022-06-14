@@ -11,6 +11,6 @@ export const imagePropType = PropTypes.shape({
     description: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
     ipfs_pin_hash: PropTypes.string.isRequired,
-    autorAddress: PropTypes.string.isRequired,
+    authorAddress: PropTypes.string.isRequired,
     ownerAddress: PropTypes.string.isRequired
 });

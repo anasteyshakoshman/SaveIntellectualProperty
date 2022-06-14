@@ -1,10 +1,10 @@
-// Inputs data
+// Input data image
 export const IMAGE_NAME = 'image_name';
 export const IMAGE_DESCRIPTION = 'image_description';
 export const FILE = 'file';
 export const AUTHOR = 'author';
 
-export const inputFields = [
+export const inputImageFields = [
     {
         name: IMAGE_NAME,
         placeholder: 'Название работы'
@@ -20,12 +20,27 @@ export const inputFields = [
         isFile: true
     }
 ];
-export const errorsMap = {
+export const errorsImageMap = {
     [IMAGE_NAME]: 'Дайте название вашей работе',
     [IMAGE_DESCRIPTION]: 'Расскажите историю работы',
     [FILE]: 'Не забудьте выбрать файл'
 };
 export const typesFiles = 'image/gif,image/png,image/jpeg,image/pjpeg';
+
+// Input data author
+export const AUTHOR_NAME = 'author_name';
+export const AUTHOR_DESCRIPTION = 'author_description';
+export const inputAuthorFields = [
+    {
+        name: AUTHOR_NAME,
+        placeholder: 'Имя автора'
+    },
+    {
+        name: AUTHOR_DESCRIPTION,
+        placeholder: 'Об авторе',
+        isBig: true
+    }
+];
 
 // Pinata
 const PINATA_BASE_URL = 'https://api.pinata.cloud';
@@ -57,4 +72,4 @@ export const pinataOptions = {
 export const infuraProvider = 'https://rinkeby.infura.io/v3/40546717988c45aaab8c5596c533c960';
 export const SMART_CONTRACT_ADDRESS = '0x3ecff07a3db56a518f1f93359e0083839c20a69a';
 export const walletConnectionProcessStartedErrorCode = -32002
-export const cancelMetamaskPayment = 4001;
+export const cancelMetamaskApprove = 4001;

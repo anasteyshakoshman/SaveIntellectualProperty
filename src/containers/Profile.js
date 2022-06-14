@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Profile from '../pages/Profile/Profile';
 import { bindActionCreators } from 'redux';
-import { getListImages } from '../actions';
+import { getUserAddress, setAuthorInfo, setAlertMessage } from '../actions';
 
 export default connect(
     state => ({
@@ -9,7 +9,9 @@ export default connect(
         listAuthorImages: state.user.listAuthorImages,
         listOwnerImages: state.user.listOwnerImages
     }),
-    dispatch => ({
-        getListImages: bindActionCreators(getListImages, dispatch)
-    })
+    dispatch => bindActionCreators({
+        getUserAddress,
+        setAuthorInfo,
+        setAlertMessage
+    }, dispatch)
 )(Profile);

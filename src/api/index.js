@@ -77,6 +77,34 @@ class ApiInterface {
             .then(res => res)
             .catch();
     }
+
+    setAuthorName(author, name) {
+        return this.contract.methods
+            .setAuthorName(name)
+            .send({ from: author });
+    }
+
+    setAuthorDescription(author, description) {
+        return this.contract.methods
+            .setAuthorDescription(description)
+            .send({ from: author });
+    }
+
+    getAuthorName(author) {
+        return this.contract.methods
+            .getAuthorName(author)
+            .call()
+            .then(res => res)
+            .catch();
+    }
+
+    getAuthorDescription(author) {
+        return this.contract.methods
+            .getAuthorDescription(author)
+            .call()
+            .then(res => res)
+            .catch();
+    }
 }
 
 export const Api = new ApiInterface();
