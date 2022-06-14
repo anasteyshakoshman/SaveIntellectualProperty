@@ -46,8 +46,10 @@ const Main = (props) => {
         }
     }, [errors[AUTHOR]]);
 
-    useEffect(() => { // delete
-        getUserAddress();
+    useEffect(() => {
+        if (!authorAddress) {
+            getUserAddress();
+        }
     }, []);
 
     const checkClearError = useCallback((fieldName) => {
