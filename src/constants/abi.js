@@ -188,11 +188,6 @@ export const abi = [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "author",
-                "type": "address"
-            },
-            {
                 "internalType": "string",
                 "name": "description",
                 "type": "string"
@@ -205,11 +200,6 @@ export const abi = [
     },
     {
         "inputs": [
-            {
-                "internalType": "address",
-                "name": "author",
-                "type": "address"
-            },
             {
                 "internalType": "string",
                 "name": "name",

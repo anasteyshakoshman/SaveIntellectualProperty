@@ -12,7 +12,8 @@ import {
 
 export default connect(
     state => ({
-        authorAddress: state.user.address
+        authorAddress: state.user.address,
+        isImageLoading: state.condition.isMainImageLoading
     }),
     dispatch => bindActionCreators({
         setAlertMessage,

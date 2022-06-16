@@ -6,20 +6,6 @@ import {
     pinataOptions
 } from '../constants';
 
-// LOADING
-const turnOnLoading = () => dispatch => {
-    dispatch({
-        type: CONDITION.LOADING_TURN_ON
-    });
-};
-
-const turnOffLoading = () => dispatch => {
-    dispatch({
-        type: CONDITION.LOADING_TURN_OFF
-    });
-};
-
-
 // ALERT
 export const setAlertMessage = (message) => dispatch => {
     dispatch({
@@ -30,6 +16,16 @@ export const setAlertMessage = (message) => dispatch => {
 
 export const clearAlertMessage = () => dispatch => {
     dispatch(setAlertMessage(''));
+};
+
+// CONDITION
+const conditionSetParam = (paramName, paramValue) => dispatch => {
+    dispatch({
+        type: CONDITION.SET_PARAM,
+        result: {
+            [paramName]: paramValue
+        }
+    });
 };
 
 // USER
@@ -75,6 +71,8 @@ export const setAuthorInfo = (name, description) => async (dispatch, getState) =
         return;
     }
 
+    dispatch(conditionSetParam('isProfileButtonLoading', true));
+
     try {
         if (name !== oldName) {
             await Api.setAuthorName(address, name);
@@ -93,7 +91,12 @@ export const setAuthorInfo = (name, description) => async (dispatch, getState) =
                 description
             });
         }
-    } catch (error) {}
+
+        dispatch(conditionSetParam('isProfileButtonLoading', false));
+    } catch (error) {
+        dispatch(conditionSetParam('isProfileButtonLoading', false));
+
+    }
 };
 
 export const getAuthorInfo = ()  => async (dispatch, getState) => {
@@ -127,32 +130,30 @@ export const getAuthorInfo = ()  => async (dispatch, getState) => {
 }
 
 export const getListImages = () => async (dispatch, getState) => {
-    const { address, listAuthorImages } = getState().user;
+    const { address, listAuthorImages: prevListImages } = getState().user;
 
     if (!address) {
         return;
     }
 
-    dispatch({
-        type: CONDITION.WAS_REQUEST_IMAGE_LIST,
-        result: true
-    });
+    dispatch(conditionSetParam('isProfileImagesLoading', true));
 
     try {
         const listTokens = await Api.getListAuthorImages(address);
 
         if (!listTokens?.length) {
+            dispatch(conditionSetParam('isProfileImagesLoading', false));
             return;
         }
 
-        const listImages = {};
+        const listImages = prevListImages;
 
         for (const tokenId of listTokens) {
             const imageHash = await Api.getImageIdentifier(Number(tokenId));
 
             // Если изображение с заданным tokenId не сохранено в БД блокчейна
             // или инфо об изображении уже загружено на клиент - скипаем
-            if (!imageHash || Object.keys(listAuthorImages[imageHash] || {})?.length) {
+            if (!imageHash || Object.keys(prevListImages[imageHash] || {})?.length) {
                 continue;
             }
 
@@ -173,10 +174,8 @@ export const getListImages = () => async (dispatch, getState) => {
             data: listImages
         });
     } catch(error) {
-        dispatch({
-            type: CONDITION.WAS_REQUEST_IMAGE_LIST,
-            result: false
-        });
+        dispatch(conditionSetParam('isProfileImagesLoading', false));
+
     }
 };
 
@@ -203,16 +202,23 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
         return;
     }
 
-    dispatch(turnOnLoading());
+    dispatch(conditionSetParam('isMainImageLoading', true));
+
+    const authorAddress = user.address;
+    let authorName = '';
+
+    try {
+        authorName = await Api.getAuthorName(authorAddress);
+    } catch (error) {}
 
     const data = new FormData();
-    const authorAddress = user.address;
     const metadata = JSON.stringify({
         name: hash, // в это поле кладем сгенерированное sha256 картинки для последующего получения изображения по хэшу
         keyvalues: {
             name,
             description,
             authorAddress,
+            authorName,
             ownerAddress: authorAddress,
             createdAt: (new Date()).toString()
         }
@@ -236,7 +242,7 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
                 dispatch({
                     type: IMAGE.SET_IS_DUPLICATE
                 });
-                dispatch(turnOffLoading());
+                dispatch(conditionSetParam('isMainImageLoading', false));
             } else if (IpfsHash) {
                 dispatch({
                     type: IMAGE.SET_PINATA_SAVING
@@ -247,21 +253,22 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
         })
         .catch(() => {
             dispatch(setAlertMessage('Не удалось сохранить изображение, попробуйте еще раз'));
-            dispatch(turnOffLoading());
+            dispatch(conditionSetParam('isMainImageLoading', false));
+
         });
 };
 
 export const saveImageToBlockchain = () => async (dispatch, getState) => {
     const {
         user: { address },
-        image: { hash, isDuplicate, wasSavedToPinata }
+        image: { hash, wasSavedToPinata }
     } = getState();
 
     if (!hash || !wasSavedToPinata) {
         return false;
     }
 
-    dispatch(turnOnLoading());
+    dispatch(conditionSetParam('isMainImageLoading', true));
 
     try {
         const response = await Api.saveImageHashToBlockchain(hash, address);
@@ -272,7 +279,7 @@ export const saveImageToBlockchain = () => async (dispatch, getState) => {
 
         dispatch(setAlertMessage('Работа успешно загружена, вы можете посмотреть информацию о ней в профиле'));
         dispatch(clearImageData());
-        dispatch(turnOffLoading());
+        dispatch(conditionSetParam('isMainImageLoading', false));
 
         // Обновляем список работ на клиенте после регистрации новой работы
         dispatch(getListImages());
@@ -290,7 +297,7 @@ export const saveImageToBlockchain = () => async (dispatch, getState) => {
                 dispatch(clearImageData());
             }).catch();
 
-        dispatch(turnOffLoading());
+        dispatch(conditionSetParam('isMainImageLoading', false));
 
         return false;
     }

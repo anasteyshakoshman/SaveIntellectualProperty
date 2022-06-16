@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // components
 import { Link } from 'react-router-dom';
 import Input from '../../components/Input/Input';
-import ButtonSubmit from '../../containers/ButtonSumbit';
+import ButtonSubmit from '../../components/ButtonSubmit/ButtonSubmit';
 import Metamask from '../../containers/Metamask';
 // resources
 import {
@@ -28,6 +28,7 @@ import './Main.css';
 const Main = (props) => {
     const {
         authorAddress,
+        isImageLoading,
         saveImageToPinata,
         saveImageToBlockchain,
         getUserAddress,
@@ -45,12 +46,6 @@ const Main = (props) => {
             }, 2000);
         }
     }, [errors[AUTHOR]]);
-
-    useEffect(() => {
-        if (!authorAddress) {
-            getUserAddress();
-        }
-    }, []);
 
     const checkClearError = useCallback((fieldName) => {
         if (errors[fieldName]) {
@@ -154,6 +149,7 @@ const Main = (props) => {
                     ))}
                     <ButtonSubmit
                         text='Получить авторство'
+                        isLoading={isImageLoading}
                         handleSubmit={handleSubmit} />
                 </div>
             </div>
@@ -163,6 +159,7 @@ const Main = (props) => {
 
 Main.propTypes = {
     authorAddress: PropTypes.string.isRequired,
+    isImageLoading: PropTypes.bool.isRequired,
     saveImageToPinata: PropTypes.func.isRequired,
     saveImageToBlockchain: PropTypes.func.isRequired,
     clearImageData: PropTypes.func.isRequired,

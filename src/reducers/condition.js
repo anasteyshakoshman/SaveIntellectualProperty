@@ -1,33 +1,26 @@
-import { CONDITION } from '../constants/action-types';
+import { CONDITION, USER } from '../constants/action-types';
 
 const initialState = {
-    buttonLoading: false,
-    wasRequestListImages: false
+    isMainImageLoading: false,
+    isProfileisMainImageLoading: false,
+    isProfileImagesLoading: false
 };
 
 export const condition = (state = initialState, action) => {
     switch (action.type) {
-        case CONDITION.LOADING_TURN_ON: {
+        case CONDITION.SET_PARAM: {
             return {
                 ...state,
-                buttonLoading: true
+                ...action.result
             };
         }
 
-        case CONDITION.LOADING_TURN_OFF: {
+        case USER.SET_AUTHOR_IMAGES: {
             return {
                 ...state,
-                buttonLoading: false
-            };
+                isProfileImagesLoading: false
+            }
         }
-
-        case CONDITION.WAS_REQUEST_IMAGE_LIST: {
-            return {
-                ...state,
-                wasRequestListImages: action.result
-            };
-        }
-
 
         default:
             return state;

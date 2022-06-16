@@ -2,13 +2,15 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 // components
 import Input from '../../components/Input/Input';
-import ButtonSubmit from '../../containers/ButtonSumbit';
+import ButtonSubmit from '../../components/ButtonSubmit/ButtonSubmit';
 import { Link } from 'react-router-dom';
 import Metamask from '../../containers/Metamask';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 // constants
 import { userPropTypes, imagePropType } from '../../propTypes';
 // utils
-import { convertDate } from '../../utils';
+import { convertDate, getShortEthAddress } from '../../utils';
 import {
     AUTHOR_NAME,
     AUTHOR_DESCRIPTION,
@@ -20,7 +22,15 @@ import { downloadIcon } from '../../resources';
 import './Profile.css';
 
 const Profile = (props) => {
-    const { user, listAuthorImages, getUserAddress, setAuthorInfo, setAlertMessage } = props;
+    const {
+        user,
+        isButtonLoading,
+        isListLoading,
+        listAuthorImages,
+        getUserAddress,
+        setAuthorInfo,
+        setAlertMessage
+    } = props;
 
     const [form, setForm] = useState({
         [AUTHOR_NAME]: user.name,
@@ -53,6 +63,9 @@ const Profile = (props) => {
         });
         }, [form]);
 
+    const notEmptyList = Object.keys(listAuthorImages)?.length;
+    const resultListImages = Object.values(listAuthorImages).reverse();
+
     return (
         <div className='profile'>
             <div className='profile-block'>
@@ -69,6 +82,7 @@ const Profile = (props) => {
                     ))}
                     <ButtonSubmit
                         text='Сохранить'
+                        isLoading={isButtonLoading}
                         handleSubmit={handleSubmit} />
                 </div>
                 <Link to='/'>
@@ -78,11 +92,12 @@ const Profile = (props) => {
                 </Link>
             </div>
             <div className='profile-block'>
-                <div className='profile-title'>Работы</div>
+                <div className='profile-title'>
+                    Работы
+                </div>
                 <div className='works'>
-                    {Object.keys(listAuthorImages)?.length ? Object.values(listAuthorImages)?.map(image => {
-                        // delete autorAddress
-                        const { name, description, ipfs_pin_hash, autorAddress, createdAt } = image;
+                    {notEmptyList ? resultListImages.map(image => {
+                        const { name, description, ipfs_pin_hash, authorName, authorAddress, createdAt } = image;
 
                         return (
                             <div key={name} className='works-item'>
@@ -97,7 +112,7 @@ const Profile = (props) => {
                                     Автор:
                                 </div>
                                 <div className='description'>
-                                    {user.address === autorAddress ? 'Вы' :  autorAddress}
+                                    {authorName ?? getShortEthAddress(authorAddress)}
                                 </div>
                                 <div className='subtitle'>
                                     Права получены:
@@ -114,6 +129,11 @@ const Profile = (props) => {
                             <span className='download-text'>Загрузить еще работу</span>
                         </div>
                     </Link>
+                    {isListLoading && (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <CircularProgress color="inherit" />
+                        </Box>
+                    )}
                 </div>
             </div>
         </div>
@@ -124,6 +144,8 @@ Profile.propTypes = {
     user: userPropTypes.isRequired,
     listOwnerImages: PropTypes.objectOf(imagePropType).isRequired,
     listAuthorImages: PropTypes.objectOf(imagePropType).isRequired,
+    isButtonLoading: PropTypes.bool.isRequired,
+    isListLoading: PropTypes.bool.isRequired,
     getUserAddress: PropTypes.func.isRequired,
     setAuthorInfo: PropTypes.func.isRequired,
     setAlertMessage: PropTypes.func.isRequired

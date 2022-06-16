@@ -70,6 +70,6 @@ export const pinataOptions = {
 
 // WEB3
 export const infuraProvider = 'https://rinkeby.infura.io/v3/40546717988c45aaab8c5596c533c960';
-export const SMART_CONTRACT_ADDRESS = '0x3ecff07a3db56a518f1f93359e0083839c20a69a';
+export const SMART_CONTRACT_ADDRESS = '0xfa62ab861528d8088d6c4dca3cbc25a57ba60d40';
 export const walletConnectionProcessStartedErrorCode = -32002
 export const cancelMetamaskApprove = 4001;

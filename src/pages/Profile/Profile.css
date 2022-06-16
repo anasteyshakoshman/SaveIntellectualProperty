@@ -12,6 +12,7 @@
 .profile-block {
     display: flex;
     flex-direction: column;
+    margin-left: 30px;
 }
 
 .profile-block:first-child {
@@ -41,12 +42,11 @@
 .works-item {
     width: 320px;
     min-height: 470px;
-    margin-right: 100px;
+    margin-right: 50px;
 }
 
 .image {
-    width: 420px;
-    margin-left: -55px;
+    width: 314px;
     border: 3px solid black;
     margin-bottom: 24px;
 }
@@ -72,9 +72,9 @@
 
 .download {
     align-items: center;
-    padding-top: 107px;
+    padding-top: 207px;
     text-align: center;
-    min-height: 500px;
+    min-height: 400px;
 }
 
 .download-button {

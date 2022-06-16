@@ -7,7 +7,9 @@ export default connect(
     state => ({
         user: state.user,
         listAuthorImages: state.user.listAuthorImages,
-        listOwnerImages: state.user.listOwnerImages
+        listOwnerImages: state.user.listOwnerImages,
+        isButtonLoading: state.condition.isProfileButtonLoading,
+        isListLoading: state.condition.isProfileImagesLoading
     }),
     dispatch => bindActionCreators({
         getUserAddress,
