@@ -104,7 +104,7 @@ const Main = (props) => {
             file
         );
 
-        // save image unical hash to blockchain
+        // save image unique hash to blockchain
         const isSuccess = await saveImageToBlockchain();
 
         if (isSuccess) {

@@ -31,6 +31,14 @@ export const user = (state = initialState, action) => {
             };
         }
 
+        case USER.SET_DATA: {
+            return {
+                ...state,
+                name: action.name,
+                description: action.description
+            };
+        }
+
         case USER.SET_AUTHOR_IMAGES: {
             return {
                 ...state,

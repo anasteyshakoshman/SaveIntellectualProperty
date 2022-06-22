@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 // components
 import Input from '../../components/Input/Input';
@@ -36,6 +36,22 @@ const Profile = (props) => {
         [AUTHOR_NAME]: user.name,
         [AUTHOR_DESCRIPTION]: user.description
     });
+
+    useEffect(() => {
+        if (user.name !== form[AUTHOR_NAME]) {
+            setForm({
+                ...form,
+                [AUTHOR_NAME]: user.name
+            });
+        }
+
+        if (user.description !== form[AUTHOR_DESCRIPTION]) {
+            setForm({
+                ...form,
+                [AUTHOR_DESCRIPTION]: user.description
+            });
+        }
+    }, [user]);
 
     const handleSubmit = useCallback(async () => {
         if (!user.address) {
@@ -87,7 +103,7 @@ const Profile = (props) => {
                 </div>
                 <Link to='/'>
                     <div className='download-button'>
-                        Загрузить еще работу
+                        Загрузить {notEmptyList ? 'еще' : ''} работу
                     </div>
                 </Link>
             </div>
@@ -126,7 +142,7 @@ const Profile = (props) => {
                     <Link to='/'>
                         <div className='works-item download'>
                             <img className='download-icon' src={downloadIcon} alt=''/>
-                            <span className='download-text'>Загрузить еще работу</span>
+                            <span className='download-text'>Загрузить {notEmptyList ? 'еще' : ''} работу</span>
                         </div>
                     </Link>
                     {isListLoading && (

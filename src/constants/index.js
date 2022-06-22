@@ -42,6 +42,11 @@ export const inputAuthorFields = [
     }
 ];
 
+// State names
+export const IS_PROFILE_BUTTON_LOADING = 'isProfileButtonLoading';
+export const IS_PROFILE_IMAGES_LOADING = 'isProfileImagesLoading';
+export const IS_MAIN_IMAGE_LOADING = 'isMainImageLoading';
+
 // Pinata
 const PINATA_BASE_URL = 'https://api.pinata.cloud';
 export const PINATA_SAVE_URL = `${PINATA_BASE_URL}/pinning/pinFileToIPFS`;
@@ -69,7 +74,7 @@ export const pinataOptions = {
 };
 
 // WEB3
-export const infuraProvider = 'https://rinkeby.infura.io/v3/40546717988c45aaab8c5596c533c960';
-export const SMART_CONTRACT_ADDRESS = '0xfa62ab861528d8088d6c4dca3cbc25a57ba60d40';
+export const INFURA_PROVIDER = 'https://rinkeby.infura.io/v3/40546717988c45aaab8c5596c533c960';
+export const SMART_CONTRACT_ADDRESS = '0x7cf264d51c385840c1844ea2a871b79ebcb2c446';
 export const walletConnectionProcessStartedErrorCode = -32002
 export const cancelMetamaskApprove = 4001;

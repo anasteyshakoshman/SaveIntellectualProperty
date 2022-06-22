@@ -6,13 +6,13 @@ import {
     PINATA_SAVE_URL,
     PINATA_DELETE_URL,
     SMART_CONTRACT_ADDRESS,
-    infuraProvider
+    INFURA_PROVIDER
 } from '../constants';
 import { abi } from '../constants/abi';
 
 class ApiInterface {
     constructor() {
-        const provider = Web3.givenProvider || new Web3.providers.HttpProvider(infuraProvider);
+        const provider = Web3.givenProvider || new Web3.providers.HttpProvider(INFURA_PROVIDER);
 
         this.web3 = new Web3(provider);
         this.contract = new this.web3.eth.Contract(abi, SMART_CONTRACT_ADDRESS)
@@ -58,13 +58,13 @@ class ApiInterface {
 
     saveImageHashToBlockchain(hash, author) {
         return this.contract.methods
-            .registerNewToken(hash, author)
+            .registerNewToken(hash)
             .send({ from: author });
     }
 
-    getListAuthorImages(owner) {
+    getListAuthorImages() {
         return this.contract.methods
-            .getTokensByAuthor(owner)
+            .getRegisteredTokens()
             .call()
             .then(res => res)
             .catch();
@@ -87,6 +87,12 @@ class ApiInterface {
     setAuthorDescription(author, description) {
         return this.contract.methods
             .setAuthorDescription(description)
+            .send({ from: author });
+    }
+
+    setAuthorData(author, name, description) {
+        return this.contract.methods
+            .setAuthorData(name, description)
             .send({ from: author });
     }
 

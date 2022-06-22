@@ -1,9 +1,10 @@
-import { CONDITION, USER } from '../constants/action-types';
+import { CONDITION, IMAGE, USER } from '../constants/action-types';
+import { IS_MAIN_IMAGE_LOADING, IS_PROFILE_IMAGES_LOADING, IS_PROFILE_BUTTON_LOADING } from '../constants';
 
 const initialState = {
-    isMainImageLoading: false,
-    isProfileisMainImageLoading: false,
-    isProfileImagesLoading: false
+    [IS_MAIN_IMAGE_LOADING]: false,
+    [IS_PROFILE_BUTTON_LOADING]: false,
+    [IS_PROFILE_IMAGES_LOADING]: false
 };
 
 export const condition = (state = initialState, action) => {
@@ -13,6 +14,13 @@ export const condition = (state = initialState, action) => {
                 ...state,
                 ...action.result
             };
+        }
+
+        case IMAGE.SET_IS_DUPLICATE: {
+            return {
+                ...state,
+                isMainImageLoading: false
+            }
         }
 
         case USER.SET_AUTHOR_IMAGES: {
