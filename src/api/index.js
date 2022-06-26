@@ -62,12 +62,10 @@ class ApiInterface {
             .send({ from: author });
     }
 
-    getListAuthorImages() {
+    getListAuthorImages(author) {
         return this.contract.methods
             .getRegisteredTokens()
-            .call()
-            .then(res => res)
-            .catch();
+            .call({ from: author });
     }
 
     getImageIdentifier(tokenId) {

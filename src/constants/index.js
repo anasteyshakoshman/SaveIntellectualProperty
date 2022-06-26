@@ -54,8 +54,8 @@ export const PINATA_DELETE_URL = `${PINATA_BASE_URL}/pinning/unpin/`;
 export const PINATA_GET_URL = `${PINATA_BASE_URL}/data/pinList?status=pinned&metadata[name]=`;
 export const PINATA_IMAGE_URL = 'https://gateway.pinata.cloud/ipfs/';
 export const pinataApiKeys = {
-    pinata_api_key: 'acb6a878c06a86b550f1',
-    pinata_secret_api_key: 'fa8fe5f3ad79f630e7d61f5cfb5fa42b6c4ed291266a2bf49a1b0758e1de88c3'
+    pinata_api_key: '105a2a21229a560aa970',
+    pinata_secret_api_key: '2a6d6161b5319f8e9bdbd2356e9ca744ac4cbc61ec31ade256438e0597065797'
 };
 export const pinataOptions = {
     cidVersion: 0,

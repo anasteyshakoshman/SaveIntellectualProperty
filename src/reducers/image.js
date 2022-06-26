@@ -2,8 +2,8 @@ import { IMAGE } from '../constants/action-types';
 
 const initialState = {
     hash: '',
-    isDuplicate: false,
-    wasSavedToPinata: false
+    ipfsPinHash: '',
+    isDuplicate: false
 };
 
 export const image = (state = initialState, action) => {
@@ -25,7 +25,7 @@ export const image = (state = initialState, action) => {
         case IMAGE.SET_PINATA_SAVING: {
             return {
                 ...state,
-                wasSavedToPinata: true
+                ipfsPinHash: action.ipfsPinHash
             };
         }
 
@@ -34,7 +34,7 @@ export const image = (state = initialState, action) => {
                 ...state,
                 hash: '',
                 isDuplicate: false,
-                wasSavedToPinata: false
+                ipfsPinHash: ''
             };
         }
 

@@ -41,8 +41,10 @@ const Main = (props) => {
 
     useEffect(() => {
         if (errors[AUTHOR]) {
-            setTimeout(async () => {
-                await getUserAddress();
+            setTimeout(() => {
+                getUserAddress()
+                    .then(handleSubmit)
+                    .catch(() => {});
             }, 2000);
         }
     }, [errors[AUTHOR]]);
@@ -72,7 +74,7 @@ const Main = (props) => {
         }
 
         checkClearError(fieldName);
-    }, [form, errors]);
+    }, [form, errors, clearImageData, setImageSha256]);
 
     const checkValidForm = useCallback( () => {
         const isFilledName = Boolean(form[IMAGE_NAME]);
@@ -87,7 +89,7 @@ const Main = (props) => {
         });
 
         return isFilledName && isFilledDescription && isFilledFile && authorAddress;
-    }, [form, authorAddress, setErrors]);
+    }, [form, authorAddress]);
 
     const handleSubmit = useCallback(throttle(async () => {
         // check valid of input data

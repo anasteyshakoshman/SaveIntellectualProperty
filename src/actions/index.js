@@ -47,6 +47,8 @@ export const getUserAddress = () => dispatch => {
             // После удачной авторизации подгружаем информацию об авторе и его список работ
             dispatch(getAuthorInfo());
             dispatch(getListImages());
+
+            return Promise.resolve();
         })
         .catch(error => {
             switch(error?.code) {
@@ -60,6 +62,8 @@ export const getUserAddress = () => dispatch => {
                     dispatch(setAlertMessage('Что-то пошло не так, пожалуйста, попробуйте позже'));
 
             }
+
+            return Promise.reject();
         });
 };
 
@@ -144,16 +148,19 @@ export const getAuthorInfo = ()  => async (dispatch, getState) => {
 }
 
 export const getListImages = () => async (dispatch, getState) => {
-    const { address, listAuthorImages: prevListImages } = getState().user;
+    const {
+        address: authorAddress,
+        listAuthorImages: prevListImages
+    } = getState().user;
 
-    if (!address) {
+    if (!authorAddress) {
         return;
     }
 
     dispatch(conditionSetParam(IS_PROFILE_IMAGES_LOADING, true));
 
     try {
-        const listTokens = await Api.getListAuthorImages();
+        const listTokens = await Api.getListAuthorImages(authorAddress);
 
         if (!listTokens?.length) {
             dispatch(conditionSetParam(IS_PROFILE_IMAGES_LOADING, false));
@@ -252,17 +259,16 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
 
             if (isDuplicate) {
                 dispatch(setAlertMessage('Данное изображение уже было зарегистрировано в сети'));
-
-                dispatch({
-                    type: IMAGE.SET_IS_DUPLICATE
-                });
             } else if (IpfsHash) {
                 dispatch({
-                    type: IMAGE.SET_PINATA_SAVING
+                    type: IMAGE.SET_PINATA_SAVING,
+                    ipfsPinHash: IpfsHash
                 });
             } else {
                 throw new Error();
             }
+
+            dispatch(conditionSetParam(IS_MAIN_IMAGE_LOADING, false));
         })
         .catch(() => {
             dispatch(setAlertMessage('Не удалось сохранить изображение, попробуйте еще раз'));
@@ -274,10 +280,10 @@ export const saveImageToPinata = (name, description, file) => async (dispatch, g
 export const saveImageToBlockchain = () => async (dispatch, getState) => {
     const {
         user: { address },
-        image: { hash, wasSavedToPinata }
+        image: { hash, ipfsPinHash }
     } = getState();
 
-    if (!hash || !wasSavedToPinata) {
+    if (!hash || !ipfsPinHash) {
         return false;
     }
 
@@ -301,7 +307,7 @@ export const saveImageToBlockchain = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch(handleMetamaskError(error));
 
-        Api.deleteImageFromPinata(hash)
+        Api.deleteImageFromPinata(ipfsPinHash)
             .then(() => {
                 dispatch(clearImageData());
             }).catch();

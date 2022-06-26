@@ -29,13 +29,20 @@ const Profile = (props) => {
         listAuthorImages,
         getUserAddress,
         setAuthorInfo,
-        setAlertMessage
+        setAlertMessage,
+        getListImages
     } = props;
 
     const [form, setForm] = useState({
         [AUTHOR_NAME]: user.name,
         [AUTHOR_DESCRIPTION]: user.description
     });
+
+    useEffect(() => {
+        if (user.address && !listAuthorImages.length) {
+            getListImages();
+        }
+    }, []);
 
     useEffect(() => {
         if (user.name !== form[AUTHOR_NAME]) {
@@ -128,7 +135,7 @@ const Profile = (props) => {
                                     Автор:
                                 </div>
                                 <div className='description'>
-                                    {authorName ?? getShortEthAddress(authorAddress)}
+                                    {authorName || getShortEthAddress(authorAddress)}
                                 </div>
                                 <div className='subtitle'>
                                     Права получены:
