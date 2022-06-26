@@ -1,4 +1,4 @@
-import {USER, ALERT, CONDITION, IMAGE } from '../constants/action-types';
+import { USER, ALERT, CONDITION, IMAGE } from '../constants/action-types';
 import { Api } from '../api';
 import {
     cancelMetamaskApprove,
