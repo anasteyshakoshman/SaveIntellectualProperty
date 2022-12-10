@@ -2,6 +2,10 @@
 
 Diploma project
 
+## Demo
+
+https://save-intellectual-property.netlify.app/
+
 ## Available Scripts
 
 In the project directory, you can run:
